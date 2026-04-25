@@ -10,7 +10,8 @@ SECRET_KEY = "89bed99c4319a419b227f42919c6e5c60bd1cdb5d2793580d41630962a2a58bc3f
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
-#Never used this stuff, if you find an easy fix in something, please leave a comment with a little explanation so i can figure out this stuff better
+#Still being made!!
+
 api = FastAPI()
 
 User_db = {
