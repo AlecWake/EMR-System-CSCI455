@@ -6,3 +6,4 @@ from .correction_request import CorrectionRequest
 from .billing_invoice import BillingInvoice
 from .insurance_policy import InsurancePolicy
 from .staff import Staff
+from .user_account import UserAccount
