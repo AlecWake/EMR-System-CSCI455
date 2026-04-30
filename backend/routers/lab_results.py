@@ -4,12 +4,17 @@ from models.lab_result import LabResult
 from models.patient import Patient
 from models.appointment import Appointment
 from schemas.lab_result import LabResultCreate, LabResultResponse
+from fastapi import APIRouter, HTTPException, Depends
+from routers.auth import require_clearance
 
 router = APIRouter(prefix="/lab-results", tags=["Lab Results"])
 
 
 @router.post("/", response_model=LabResultResponse)
-def create_lab_result(lab_result: LabResultCreate):
+def create_lab_result(
+    lab_result: LabResultCreate,
+    user = Depends(require_clearance(2))
+):
     db = SessionLocal()
 
     patient = db.query(Patient).filter(Patient.patient_id == lab_result.patient_id).first()

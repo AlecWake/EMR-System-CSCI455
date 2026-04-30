@@ -4,12 +4,17 @@ from models.billing_invoice import BillingInvoice
 from models.patient import Patient
 from models.appointment import Appointment
 from schemas.billing_invoice import BillingInvoiceCreate, BillingInvoiceResponse
+from fastapi import APIRouter, HTTPException, Depends
+from routers.auth import require_clearance
 
 router = APIRouter(prefix="/billing", tags=["Billing"])
 
 
 @router.post("/", response_model=BillingInvoiceResponse)
-def create_billing_invoice(billing: BillingInvoiceCreate):
+def create_billing_invoice(
+    billing: BillingInvoiceCreate,
+    user = Depends(require_clearance(4))
+):
     db = SessionLocal()
 
     patient = db.query(Patient).filter(Patient.patient_id == billing.patient_id).first()

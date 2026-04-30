@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from database import engine, Base
 import models
-from routers import patients, appointments, prescriptions, lab_results, correction_requests, billing_invoices, insurance_policies, staff
+from routers import patients, appointments, prescriptions, lab_results, correction_requests, billing_invoices, insurance_policies, staff, auth
 
 app = FastAPI()
 
@@ -15,6 +15,7 @@ app.include_router(correction_requests.router)
 app.include_router(billing_invoices.router)
 app.include_router(insurance_policies.router)
 app.include_router(staff.router)
+app.include_router(auth.router)
 
 @app.get("/")
 def root():

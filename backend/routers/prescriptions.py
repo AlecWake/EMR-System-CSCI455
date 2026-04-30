@@ -4,12 +4,17 @@ from models.prescription import Prescription
 from models.patient import Patient
 from models.appointment import Appointment
 from schemas.prescription import PrescriptionCreate, PrescriptionResponse
+from routers.auth import require_clearance
+from fastapi import Depends
 
 router = APIRouter(prefix="/prescriptions", tags=["Prescriptions"])
 
 
 @router.post("/", response_model=PrescriptionResponse)
-def create_prescription(prescription: PrescriptionCreate):
+def create_prescription(
+    prescription: PrescriptionCreate,
+    user = Depends(require_clearance(3))
+):
     db = SessionLocal()
 
     patient = db.query(Patient).filter(Patient.patient_id == prescription.patient_id).first()
