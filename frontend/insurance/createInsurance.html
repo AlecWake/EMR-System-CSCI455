@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Insurance</title>
+    <link rel="stylesheet" href="../../css.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <ul>
+        <li><a href="../../patient/patient.html" id="patientLink">Patient</a></li>
+        <li><a href="../../appointment/appointments.html" id="appointmentsLink">Appointments</a></li>
+        <li><a href="../../prescription/prescriptions.html" id="prescriptionsLink">Prescriptions</a></li>
+        <li><a href="../../labResult/labResults.html" id="labResultsLink">Lab Results</a></li>
+        <li><a href="../../billing/billing.html" id="billingLink">Billing</a></li>
+        <li><a href="../../correction/corrections.html" id="correctionsLink">Correction Requests</a></li>
+        <li><a href="../../staff/staff.html" id="staffLink">Staff</a></li>
+        <li><a href="../../index/index.html">Log out</a></li>
+    </ul>
+</nav>
+
+<div class="container">
+    <h1>Create Insurance</h1>
+
+    <input id="provider" placeholder="Provider Name"><br>
+    <input id="policy" placeholder="Policy Number"><br>
+
+    <label>Start Date:</label><br>
+    <input type="date" id="startDate"><br>
+
+    <label>End Date:</label><br>
+    <input type="date" id="endDate"><br>
+
+    <button class="main-button" onclick="createInsurance()">
+        Create Insurance
+    </button>
+</div>
+
+<script src="createInsurance.js"></script>
+
+</body>
+</html>

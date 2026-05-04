@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Staff</title>
+    <link rel="stylesheet" href="../../css.css">
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <ul>
+            <li><a href="../../patient/patient.html" id="patientLink">Patient</a></li>
+            <li><a href="../../appointment/appointments.html" id="appointmentsLink">Appointments</a></li>
+            <li><a href="../../prescription/prescriptions.html" id="prescriptionsLink">Prescriptions</a></li>
+            <li><a href="../../labResult/labResults.html" id="labResultsLink">Lab Results</a></li>
+            <li><a href="../../billing/billing.html" id="billingLink">Billing</a></li>
+            <li><a href="../../correction/corrections.html" id="correctionsLink">Correction Requests</a></li>
+            <li><a href="../../insurance/insurance.html" id="insuranceLink">Insurance</a></li>
+            <li><a href="#" class="active">Staff</a></li>
+            <li><a href="../../index/index.html">Log out</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <h1>Staff</h1>
+
+        <!-- CREATE BUTTON -->
+        <a id="createStaffBtn" class="main-button">+ Create Staff</a>
+
+        <br><br>
+
+        <!-- SEARCH -->
+        <input type="text" id="searchInput" placeholder="Search staff by ID">
+        <button class="main-button" onclick="searchStaffById()">Find Staff</button>
+        <button class="main-button" onclick="resetStaffView()">Reset</button>
+
+        <br><br>
+
+        <div id="staffContainer">
+            Loading staff...
+        </div>
+    </div>
+
+    <script src="staff.js"></script>
+
+</body>
+</html>
