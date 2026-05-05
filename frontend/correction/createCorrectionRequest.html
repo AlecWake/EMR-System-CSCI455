@@ -17,14 +17,19 @@
         <li><a href="../../correction/corrections.html" id="correctionsLink">Correction Requests</a></li>
         <li><a href="../../insurance/insurance.html" id="insuranceLink">Insurance</a></li>
         <li><a href="../../staff/staff.html" id="staffLink">Staff</a></li>
-        <li><a href="../../index/index.html">Log out</a></li>
+        <li><a href="#" onclick="logout()">Log out</a></li>
     </ul>
 </nav>
 
 <div class="container">
     <h1>Create Correction Request</h1>
 
-    <textarea id="description" placeholder="Describe the issue..." rows="4"></textarea><br>
+    <button id="backBtn" class="main-button">← Back</button>
+    <br><br>
+
+    <input type="text" id="field" placeholder="Field to correct"><br>
+
+    <textarea id="description" placeholder="Describe the issue"></textarea><br>
 
     <button class="main-button" onclick="createCorrectionRequest()">
         Submit Request

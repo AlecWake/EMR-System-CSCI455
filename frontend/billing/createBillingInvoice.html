@@ -18,23 +18,26 @@
             <li><a href="../../correction/corrections.html" id="correctionsLink">Correction Requests</a></li>
             <li><a href="../../insurance/insurance.html" id="insuranceLink">Insurance</a></li>
             <li><a href="../../staff/staff.html" id="staffLink">Staff</a></li>
-            <li><a href="../../index/index.html">Log out</a></li>
+            <li><a href="#" onclick="logout()">Log out</a></li>
         </ul>
     </nav>
 
     <div class="container">
-        <h1>Create Invoice</h1>
+    <h1>Create Invoice</h1>
 
-        <input type="number" step="0.01" id="amount" placeholder="Total Amount"><br>
-        <input type="text" id="status" placeholder="Payment Status (Paid, Pending)"><br>
-        <input type="text" id="notes" placeholder="Billing Notes (optional)"><br>
+    <button id="backBtn" class="main-button">← Back</button>
+    <br><br>
 
-        <button class="main-button" onclick="createInvoice()">
-            Create Invoice
-        </button>
-    </div>
+    <input type="number" step="0.01" id="amount" placeholder="Total Amount"><br>
+    <input type="text" id="status" placeholder="Payment Status (Paid, Pending)"><br>
+    <input type="text" id="notes" placeholder="Billing Notes (optional)"><br>
 
-    <script src="createBillingInvoice.js"></script>
+    <button class="main-button" onclick="createInvoice()">
+        Create Invoice
+    </button>
+</div>
+
+    <script src="createBillingInvoice.js?v=2"></script>
 
 </body>
 </html>

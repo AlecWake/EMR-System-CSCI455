@@ -32,7 +32,12 @@ function attachPatientIdToLinks(id) {
 async function fetchLabResults(patientId) {
     try {
         const response = await fetch(
-            `http://127.0.0.1:8000/lab-results/patient/${patientId}`
+            `http://127.0.0.1:8000/lab-results/patient/${patientId}`,
+            {
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem("token")
+                }
+            }
         );
 
         if (!response.ok) {
@@ -83,6 +88,12 @@ function renderLabResults(results) {
 // LOAD
 window.onload = function () {
     const id = getPatientIdFromURL();
+    const clearance = parseInt(localStorage.getItem("clearance"));
+
+    if (clearance > 1) {
+        fetchAllLabResults();
+        return;
+    }
 
     if (!id) {
         document.getElementById("labResultsContainer").innerText =
@@ -92,4 +103,41 @@ window.onload = function () {
 
     attachPatientIdToLinks(id);
     fetchLabResults(id);
+
+    const staffLink = document.getElementById("staffLink");
+    if (staffLink) {
+        staffLink.parentElement.style.display = "none";
+    }
 };
+
+function logout() {
+    localStorage.clear();
+    window.location.href = "/";
+}
+
+async function fetchAllLabResults() {
+    try {
+        const response = await fetch(
+            "http://127.0.0.1:8000/lab-results/",
+            {
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem("token")
+                }
+            }
+        );
+
+        if (!response.ok) {
+            document.getElementById("labResultsContainer").innerText =
+                "Failed to load lab results";
+            return;
+        }
+
+        const data = await response.json();
+        renderLabResults(data);
+
+    } catch (error) {
+        console.error(error);
+        document.getElementById("labResultsContainer").innerText =
+            "Error loading lab results";
+    }
+}

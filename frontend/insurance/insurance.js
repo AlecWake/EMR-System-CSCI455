@@ -24,7 +24,12 @@ function setupNewInsuranceButton(id) {
 async function fetchInsurance(patientId) {
     try {
         const response = await fetch(
-            `http://127.0.0.1:8000/insurance/patient/${patientId}`
+            `http://127.0.0.1:8000/insurance/patient/${patientId}`,
+            {
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem("token")
+                }
+            }
         );
 
         if (!response.ok) {
@@ -72,6 +77,18 @@ function renderInsurance(policies) {
 
 window.onload = function () {
     const id = getPatientIdFromURL();
+    const clearance = parseInt(localStorage.getItem("clearance"));
+
+    const newInsuranceBtn = document.getElementById("newInsuranceBtn");
+
+    if (clearance > 1) {
+        if (newInsuranceBtn) {
+            newInsuranceBtn.style.display = "none";
+        }
+
+        fetchAllInsurance();
+        return;
+    }
 
     if (!id) {
         document.getElementById("insuranceContainer").innerText =
@@ -80,6 +97,47 @@ window.onload = function () {
     }
 
     attachPatientIdToLinks(id);
-    setupNewInsuranceButton(id);
+
+    if (newInsuranceBtn) {
+        newInsuranceBtn.href = `createInsurance.html?id=${id}`;
+    }
+
     fetchInsurance(id);
+
+    const staffLink = document.getElementById("staffLink");
+    if (staffLink) {
+        staffLink.parentElement.style.display = "none";
+    }
 };
+
+function logout() {
+    localStorage.clear();
+    window.location.href = "/";
+}
+
+async function fetchAllInsurance() {
+    try {
+        const response = await fetch(
+            "http://127.0.0.1:8000/insurance/",
+            {
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem("token")
+                }
+            }
+        );
+
+        if (!response.ok) {
+            document.getElementById("insuranceContainer").innerText =
+                "Failed to load insurance";
+            return;
+        }
+
+        const data = await response.json();
+        renderInsurance(data);
+
+    } catch (error) {
+        console.error(error);
+        document.getElementById("insuranceContainer").innerText =
+            "Error loading insurance";
+    }
+}

@@ -39,7 +39,8 @@ async function createAppointment() {
         const response = await fetch("http://127.0.0.1:8000/appointments/", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + localStorage.getItem("token")
             },
             body: JSON.stringify(payload)
         });
@@ -107,7 +108,32 @@ function attachPatientIdToLinks(id) {
 window.onload = function () {
     const id = getPatientIdFromURL();
 
-    if (!id) return;
+    if (!id) {
+        alert("Missing patient ID");
+        return;
+    }
 
     attachPatientIdToLinks(id);
+
+    const clearance = parseInt(localStorage.getItem("clearance"));
+
+    if (clearance === 1) {
+        const staffLink = document.getElementById("staffLink");
+        if (staffLink) {
+            staffLink.parentElement.style.display = "none";
+        }
+    }
+
+    // BACK BUTTON
+    const backBtn = document.getElementById("backBtn");
+    if (backBtn) {
+        backBtn.onclick = function () {
+            window.location.href = `appointments.html?id=${id}`;
+        };
+    }
 };
+
+function logout() {
+    localStorage.clear();
+    window.location.href = "/";
+}

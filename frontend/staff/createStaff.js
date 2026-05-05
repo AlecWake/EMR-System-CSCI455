@@ -57,6 +57,16 @@ async function createStaff() {
 }
 
 window.onload = function () {
-    const id = getPatientIdFromURL();
-    if (id) attachPatientIdToLinks(id);
+    const backBtn = document.getElementById("backBtn");
+
+    if (backBtn) {
+        backBtn.onclick = function () {
+            window.location.href = "staff.html";
+        };
+    }
 };
+
+function logout() {
+    localStorage.clear();
+    window.location.href = "/";
+}

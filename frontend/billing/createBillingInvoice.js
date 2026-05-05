@@ -65,7 +65,8 @@ async function createInvoice() {
         const response = await fetch("http://127.0.0.1:8000/billing/", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + localStorage.getItem("token")
             },
             body: JSON.stringify(payload)
         });
@@ -96,9 +97,24 @@ window.onload = function () {
 
     attachPatientIdToLinks(patientId);
 
-    // OPTIONAL: show which appointment
-    const info = document.getElementById("appointmentInfo");
-    if (info) {
-        info.innerText = `Creating invoice for Appointment #${appointmentId}`;
+    const clearance = parseInt(localStorage.getItem("clearance"));
+
+    if (clearance === 1) {
+        const staffLink = document.getElementById("staffLink");
+        if (staffLink) {
+            staffLink.parentElement.style.display = "none";
+        }
+    }
+
+    const backBtn = document.getElementById("backBtn");
+    if (backBtn) {
+        backBtn.onclick = function () {
+            window.location.href = `../appointment/appointments.html?id=${patientId}`;
+        };
     }
 };
+
+function logout() {
+    localStorage.clear();
+    window.location.href = "/";
+}

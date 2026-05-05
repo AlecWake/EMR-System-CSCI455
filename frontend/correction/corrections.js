@@ -24,7 +24,12 @@ function setupNewCorrectionButton(id) {
 async function fetchCorrections(patientId) {
     try {
         const response = await fetch(
-            `http://127.0.0.1:8000/correction-requests/patient/${patientId}`
+            `http://127.0.0.1:8000/correction-requests/patient/${patientId}`,
+            {
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem("token")
+                }
+            }
         );
 
         if (!response.ok) {
@@ -81,6 +86,18 @@ function renderCorrections(corrections) {
 // On load
 window.onload = function () {
     const id = getPatientIdFromURL();
+    const clearance = parseInt(localStorage.getItem("clearance"));
+
+    const newCorrectionBtn = document.getElementById("newCorrectionBtn");
+
+    if (clearance > 1) {
+        if (newCorrectionBtn) {
+            newCorrectionBtn.style.display = "none";
+        }
+
+        fetchAllCorrections();
+        return;
+    }
 
     if (!id) {
         document.getElementById("correctionsContainer").innerText =
@@ -89,6 +106,47 @@ window.onload = function () {
     }
 
     attachPatientIdToLinks(id);
-    setupNewCorrectionButton(id);
+
+    if (newCorrectionBtn) {
+        newCorrectionBtn.href = `createCorrectionRequest.html?id=${id}`;
+    }
+
     fetchCorrections(id);
+
+    const staffLink = document.getElementById("staffLink");
+    if (staffLink) {
+        staffLink.parentElement.style.display = "none";
+    }
 };
+
+function logout() {
+    localStorage.clear();
+    window.location.href = "/";
+}
+
+async function fetchAllCorrections() {
+    try {
+        const response = await fetch(
+            "http://127.0.0.1:8000/correction-requests/",
+            {
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem("token")
+                }
+            }
+        );
+
+        if (!response.ok) {
+            document.getElementById("correctionsContainer").innerText =
+                "Failed to load correction requests";
+            return;
+        }
+
+        const data = await response.json();
+        renderCorrections(data);
+
+    } catch (error) {
+        console.error(error);
+        document.getElementById("correctionsContainer").innerText =
+            "Error loading correction requests";
+    }
+}

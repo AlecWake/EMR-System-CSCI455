@@ -18,17 +18,21 @@
             <li><a href="../../correction/corrections.html" id="correctionsLink">Correction Requests</a></li>
             <li><a href="../../insurance/insurance.html" id="insuranceLink">Insurance</a></li>
             <li><a href="../../staff/staff.html" id="staffLink">Staff</a></li>
-            <li><a href="../../index/index.html">Log out</a></li>
+            <li><a href="#" onclick="logout()">Log out</a></li>
         </ul>
     </nav>
 
     <div class="container">
         <h1>Create Appointment</h1>
 
+        <button id="backBtn" class="main-button">← Back</button>
+        <br><br>
+
         <input type="text" id="provider" placeholder="Provider Name"><br>
+
         <label>Start Time:</label><br>
         <input type="datetime-local" id="startTime" step="900"><br>
-        
+
         <input type="text" id="reason" placeholder="Reason for Visit (optional)"><br>
 
         <button class="main-button" onclick="createAppointment()">Create Appointment</button>

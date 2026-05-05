@@ -39,7 +39,8 @@ async function createCorrectionRequest() {
         const response = await fetch("http://127.0.0.1:8000/correction-requests/", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + localStorage.getItem("token")
             },
             body: JSON.stringify(payload)
         });
@@ -63,5 +64,34 @@ async function createCorrectionRequest() {
 // On load
 window.onload = function () {
     const id = getPatientIdFromURL();
-    if (id) attachPatientIdToLinks(id);
+
+    if (!id) {
+        alert("Missing patient ID");
+        return;
+    }
+
+    attachPatientIdToLinks(id);
+
+    const clearance = parseInt(localStorage.getItem("clearance"));
+
+    // Hide staff tab for patient
+    if (clearance === 1) {
+        const staffLink = document.getElementById("staffLink");
+        if (staffLink) {
+            staffLink.parentElement.style.display = "none";
+        }
+    }
+
+    // BACK BUTTON
+    const backBtn = document.getElementById("backBtn");
+    if (backBtn) {
+        backBtn.onclick = function () {
+            window.location.href = `corrections.html?id=${id}`;
+        };
+    }
 };
+
+function logout() {
+    localStorage.clear();
+    window.location.href = "/";
+}

@@ -18,12 +18,15 @@
         <li><a href="../../correction/corrections.html" id="correctionsLink">Correction Requests</a></li>
         <li><a href="../../insurance/insurance.html" id="insuranceLink">Insurance</a></li>
         <li><a href="../../staff/staff.html" id="staffLink">Staff</a></li>
-        <li><a href="../../index/index.html">Log out</a></li>
+        <li><a href="#" onclick="logout()">Log out</a></li>
     </ul>
 </nav>
 
 <div class="container">
     <h1>Create Lab Result</h1>
+
+    <button id="backBtn" class="main-button">← Back</button>
+    <br><br>
 
     <input type="text" id="testName" placeholder="Test Name"><br>
     <input type="text" id="value" placeholder="Result Value"><br>
@@ -35,7 +38,7 @@
     </button>
 </div>
 
-<script src="createLabResult.js"></script>
+<script src="createLabResult.js?v=2"></script>
 
 </body>
 </html>

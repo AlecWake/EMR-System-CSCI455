@@ -7,7 +7,6 @@
 </head>
 <body>
 
-    <!-- NAVBAR -->
     <nav class="navbar">
         <ul>
             <li><a href="../../patient/patient.html" id="patientLink">Patient</a></li>
@@ -18,25 +17,22 @@
             <li><a href="../../correction/corrections.html" id="correctionsLink">Correction Requests</a></li>
             <li><a href="../../insurance/insurance.html" id="insuranceLink">Insurance</a></li>
             <li><a href="../../staff/staff.html" id="staffLink">Staff</a></li>
-            <li><a href="../../index/index.html">Log out</a></li>
+            <li><a href="#" onclick="logout()">Log out</a></li>
         </ul>
     </nav>
 
-    <!-- MAIN CONTENT -->
     <div class="container">
         <h1>Appointments</h1>
 
-        <!-- New Appointment Button -->
         <a id="newAppointmentBtn" class="main-button">
             + New Appointment
         </a>
 
-        <!-- Appointments list -->
         <div id="appointmentsContainer">
             Loading appointments...
         </div>
     </div>
 
-    <script src="appointments.js"></script>
+    <script src="appointments.js?v=2"></script>
 </body>
 </html>

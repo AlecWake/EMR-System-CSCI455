@@ -53,8 +53,13 @@ function setupNewAppointmentButton(id) {
 async function fetchAppointments(patientId) {
     try {
         const response = await fetch(
-            `http://127.0.0.1:8000/appointments/patient/${patientId}`
-        );
+        `http://127.0.0.1:8000/appointments/patient/${patientId}`,
+        {
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("token")
+            }
+        }
+);
 
         if (!response.ok) {
             document.getElementById("appointmentsContainer").innerText =
@@ -76,6 +81,7 @@ async function fetchAppointments(patientId) {
 // Render cards
 function renderAppointments(appointments) {
     const container = document.getElementById("appointmentsContainer");
+    const clearance = parseInt(localStorage.getItem("clearance"));
 
     if (appointments.length === 0) {
         container.innerHTML = "<p>No appointments found.</p>";
@@ -88,6 +94,28 @@ function renderAppointments(appointments) {
         const card = document.createElement("div");
         card.className = "patient-card";
 
+        // 🔥 Only show buttons if NOT a patient
+        let actions = "";
+
+        if (clearance > 1) {
+            actions = `
+                <a href="../../prescription/createPrescription.html?id=${appt.patient_id}&appointment_id=${appt.appointment_id}" 
+                class="main-button">
+                + Create Prescription
+                </a>
+
+                <a href="../../labResult/createLabResult.html?id=${appt.patient_id}&appointment_id=${appt.appointment_id}" 
+                class="main-button">
+                + Add Lab Result
+                </a>
+
+                <a href="../../billing/createBillingInvoice.html?id=${appt.patient_id}&appointment_id=${appt.appointment_id}" 
+                class="main-button">
+                + Create Invoice
+                </a>
+            `;
+        }
+
         card.innerHTML = `
             <h3>Appointment #${appt.appointment_id}</h3>
 
@@ -99,20 +127,7 @@ function renderAppointments(appointments) {
 
             <br>
 
-            <a href="../../prescription/createPrescription.html?id=${appt.patient_id}&appointment_id=${appt.appointment_id}" 
-            class="main-button">
-            + Create Prescription
-            </a>
-
-            <a href="../../labResult/createLabResult.html?id=${appt.patient_id}&appointment_id=${appt.appointment_id}" 
-            class="main-button">
-            + Add Lab Result
-            </a>
-
-            <a href="../../billing/createBillingInvoice.html?id=${appt.patient_id}&appointment_id=${appt.appointment_id}" 
-            class="main-button">
-            + Create Invoice
-            </a>
+            ${actions}
         `;
 
         container.appendChild(card);
@@ -122,6 +137,17 @@ function renderAppointments(appointments) {
 // On page load
 window.onload = function () {
     const id = getPatientIdFromURL();
+    const clearance = parseInt(localStorage.getItem("clearance"));
+
+    if (clearance > 1) {
+        const newAppointmentBtn = document.getElementById("newAppointmentBtn");
+        if (newAppointmentBtn) {
+            newAppointmentBtn.style.display = "none";
+        }
+
+        fetchAllAppointments();
+        return;
+    }
 
     if (!id) {
         document.getElementById("appointmentsContainer").innerText =
@@ -132,5 +158,42 @@ window.onload = function () {
     attachPatientIdToLinks(id);
     setupNewAppointmentButton(id);
     fetchAppointments(id);
+
+    const staffLink = document.getElementById("staffLink");
+    if (staffLink) {
+        staffLink.parentElement.style.display = "none";
+    }
 };
+
+function logout() {
+    localStorage.clear();
+    window.location.href = "/";
+}
+
+async function fetchAllAppointments() {
+    try {
+        const response = await fetch(
+            "http://127.0.0.1:8000/appointments/",
+            {
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem("token")
+                }
+            }
+        );
+
+        if (!response.ok) {
+            document.getElementById("appointmentsContainer").innerText =
+                "Failed to load appointments";
+            return;
+        }
+
+        const data = await response.json();
+        renderAppointments(data);
+
+    } catch (error) {
+        console.error(error);
+        document.getElementById("appointmentsContainer").innerText =
+            "Error loading appointments";
+    }
+}
 

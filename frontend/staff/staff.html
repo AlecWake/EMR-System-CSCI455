@@ -18,22 +18,16 @@
             <li><a href="../../correction/corrections.html" id="correctionsLink">Correction Requests</a></li>
             <li><a href="../../insurance/insurance.html" id="insuranceLink">Insurance</a></li>
             <li><a href="#" class="active">Staff</a></li>
-            <li><a href="../../index/index.html">Log out</a></li>
+            <li><a href="#" onclick="logout()">Log out</a></li>
         </ul>
     </nav>
 
     <div class="container">
         <h1>Staff</h1>
 
-        <!-- CREATE BUTTON -->
-        <a id="createStaffBtn" class="main-button">+ Create Staff</a>
-
-        <br><br>
-
-        <!-- SEARCH -->
-        <input type="text" id="searchInput" placeholder="Search staff by ID">
-        <button class="main-button" onclick="searchStaffById()">Find Staff</button>
-        <button class="main-button" onclick="resetStaffView()">Reset</button>
+        <a href="createStaff.html" class="main-button">
+            + Create Staff
+        </a>
 
         <br><br>
 
@@ -42,7 +36,7 @@
         </div>
     </div>
 
-    <script src="staff.js"></script>
+    <script src="staff.js?v=7"></script>
 
 </body>
 </html>

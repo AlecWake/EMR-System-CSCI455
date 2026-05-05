@@ -51,7 +51,12 @@ function attachPatientIdToLinks(id) {
 async function fetchPrescriptions(patientId) {
     try {
         const response = await fetch(
-            `http://127.0.0.1:8000/prescriptions/patient/${patientId}`
+            `http://127.0.0.1:8000/prescriptions/patient/${patientId}`,
+            {
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem("token")
+                }
+            }
         );
 
         if (!response.ok) {
@@ -103,6 +108,12 @@ function renderPrescriptions(prescriptions) {
 // On load
 window.onload = function () {
     const id = getPatientIdFromURL();
+    const clearance = parseInt(localStorage.getItem("clearance"));
+
+    if (clearance > 1) {
+        fetchAllPrescriptions();
+        return;
+    }
 
     if (!id) {
         document.getElementById("prescriptionsContainer").innerText =
@@ -112,4 +123,41 @@ window.onload = function () {
 
     attachPatientIdToLinks(id);
     fetchPrescriptions(id);
+
+    const staffLink = document.getElementById("staffLink");
+    if (staffLink) {
+        staffLink.parentElement.style.display = "none";
+    }
 };
+
+function logout() {
+    localStorage.clear();
+    window.location.href = "/";
+}
+
+async function fetchAllPrescriptions() {
+    try {
+        const response = await fetch(
+            "http://127.0.0.1:8000/prescriptions/",
+            {
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem("token")
+                }
+            }
+        );
+
+        if (!response.ok) {
+            document.getElementById("prescriptionsContainer").innerText =
+                "Failed to load prescriptions";
+            return;
+        }
+
+        const data = await response.json();
+        renderPrescriptions(data);
+
+    } catch (error) {
+        console.error(error);
+        document.getElementById("prescriptionsContainer").innerText =
+            "Error loading prescriptions";
+    }
+}

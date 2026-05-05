@@ -66,7 +66,8 @@ async function createLabResult() {
         const response = await fetch("http://127.0.0.1:8000/lab-results/", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + localStorage.getItem("token")
             },
             body: JSON.stringify(payload)
         });
@@ -88,12 +89,33 @@ async function createLabResult() {
 
 // LOAD
 window.onload = function () {
-    const { patientId } = getParams();
+    const { patientId, appointmentId } = getParams();
 
-    if (!patientId) {
-        alert("Missing patient ID");
+    if (!patientId || !appointmentId) {
+        alert("Missing patient or appointment ID");
         return;
     }
 
     attachPatientIdToLinks(patientId);
+
+    const clearance = parseInt(localStorage.getItem("clearance"));
+
+    if (clearance === 1) {
+        const staffLink = document.getElementById("staffLink");
+        if (staffLink) {
+            staffLink.parentElement.style.display = "none";
+        }
+    }
+
+    const backBtn = document.getElementById("backBtn");
+    if (backBtn) {
+        backBtn.onclick = function () {
+            window.location.href = `../appointment/appointments.html?id=${patientId}`;
+        };
+    }
 };
+
+function logout() {
+    localStorage.clear();
+    window.location.href = "/";
+}

@@ -32,7 +32,12 @@ function attachPatientIdToLinks(id) {
 async function fetchBilling(patientId) {
     try {
         const response = await fetch(
-            `http://127.0.0.1:8000/billing/patient/${patientId}`
+            `http://127.0.0.1:8000/billing/patient/${patientId}`,
+            {
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem("token")
+                }
+            }
         );
 
         if (!response.ok) {
@@ -82,6 +87,12 @@ function renderBilling(records) {
 // LOAD
 window.onload = function () {
     const id = getPatientIdFromURL();
+    const clearance = parseInt(localStorage.getItem("clearance"));
+
+    if (clearance > 1) {
+        fetchAllBilling();
+        return;
+    }
 
     if (!id) {
         document.getElementById("billingContainer").innerText =
@@ -91,4 +102,41 @@ window.onload = function () {
 
     attachPatientIdToLinks(id);
     fetchBilling(id);
+
+    const staffLink = document.getElementById("staffLink");
+    if (staffLink) {
+        staffLink.parentElement.style.display = "none";
+    }
 };
+
+function logout() {
+    localStorage.clear();
+    window.location.href = "/";
+}
+
+async function fetchAllBilling() {
+    try {
+        const response = await fetch(
+            "http://127.0.0.1:8000/billing/",
+            {
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem("token")
+                }
+            }
+        );
+
+        if (!response.ok) {
+            document.getElementById("billingContainer").innerText =
+                "Failed to load billing data";
+            return;
+        }
+
+        const data = await response.json();
+        renderBilling(data);
+
+    } catch (error) {
+        console.error(error);
+        document.getElementById("billingContainer").innerText =
+            "Error loading billing data";
+    }
+}

@@ -1,13 +1,14 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from database import SessionLocal
 from models.staff import Staff
 from schemas.staff import StaffCreate, StaffResponse
+from routers.auth import require_clearance
 
 router = APIRouter(prefix="/staff", tags=["Staff"])
 
 
 @router.post("/", response_model=StaffResponse)
-def create_staff(staff: StaffCreate):
+def create_staff(staff: StaffCreate, user = Depends(require_clearance(2))):
     db = SessionLocal()
 
     new_staff = Staff(
@@ -27,7 +28,7 @@ def create_staff(staff: StaffCreate):
 
 
 @router.get("/", response_model=list[StaffResponse])
-def get_all_staff():
+def get_all_staff(user = Depends(require_clearance(2))):
     db = SessionLocal()
 
     staff_members = db.query(Staff).all()
@@ -38,7 +39,7 @@ def get_all_staff():
 
 
 @router.get("/{staff_id}", response_model=StaffResponse)
-def get_staff(staff_id: int):
+def get_staff(staff_id: int, user = Depends(require_clearance(2))):
     db = SessionLocal()
 
     staff = db.query(Staff).filter(Staff.staff_id == staff_id).first()
