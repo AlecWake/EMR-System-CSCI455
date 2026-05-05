@@ -3,6 +3,8 @@ from database import SessionLocal
 from models.appointment import Appointment
 from models.patient import Patient
 from schemas.appointment import AppointmentCreate, AppointmentResponse
+from routers.auth import get_current_user, require_clearance
+from fastapi import Depends
 
 router = APIRouter(prefix="/appointments", tags=["Appointments"])
 
@@ -31,8 +33,20 @@ def create_appointment(appointment: AppointmentCreate):
 
     return new_appointment
 
+@router.get("/", response_model=list[AppointmentResponse])
+def get_all_appointments(user = Depends(require_clearance(2))):
+    db = SessionLocal()
+
+    appointments = db.query(Appointment).all()
+
+    db.close()
+    return appointments
+
 @router.get("/patient/{patient_id}", response_model=list[AppointmentResponse])
-def get_appointments_for_patient(patient_id: int):
+def get_appointments_for_patient(patient_id: int, user = Depends(get_current_user)):
+    if user.clearance == 1 and user.patient_id != patient_id:
+        raise HTTPException(status_code=403, detail="Access denied")
+    
     db = SessionLocal()
 
     patient = db.query(Patient).filter(Patient.patient_id == patient_id).first()

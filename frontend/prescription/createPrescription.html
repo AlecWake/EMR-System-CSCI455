@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Prescription</title>
+    <link rel="stylesheet" href="../../css.css">
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <ul>
+            <li><a href="../../patient/patient.html" id="patientLink">Patient</a></li>
+            <li><a href="../../appointment/appointments.html" id="appointmentsLink">Appointments</a></li>
+            <li><a href="../../prescription/prescriptions.html" id="prescriptionsLink">Prescriptions</a></li>
+            <li><a href="../../labResult/labResults.html" id="labResultsLink">Lab Results</a></li>
+            <li><a href="../../billing/billing.html" id="billingLink">Billing</a></li>
+            <li><a href="../../correction/corrections.html" id="correctionsLink">Correction Requests</a></li>
+            <li><a href="../../insurance/insurance.html" id="insuranceLink">Insurance</a></li>
+            <li><a href="../../staff/staff.html" id="staffLink">Staff</a></li>
+            <li><a href="#" onclick="logout()">Log out</a></li>
+        </ul>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <div class="container">
+        <h1>Create Prescription</h1>
+
+        <button id="backBtn" class="main-button">← Back</button>
+        <br><br>
+
+        <input type="text" id="provider" placeholder="Provider Name"><br>
+        <input type="text" id="medication" placeholder="Medication Name"><br>
+        <input type="text" id="dosage" placeholder="Dosage"><br>
+        <input type="text" id="directions" placeholder="Directions (optional)"><br>
+        <input type="text" id="duration" placeholder="Duration"><br>
+
+        <button class="main-button" onclick="createPrescription()">
+            Create Prescription
+        </button>
+    </div>
+
+    <script src="createPrescription.js?v=2"></script>
+
+</body>
+</html>

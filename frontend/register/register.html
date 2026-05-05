@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <link rel="stylesheet" href="../../css.css">
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <ul>
+            <li><a href="../index/index.html">Home</a></li>
+        </ul>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <div class="container">
+        <h1>Register New Patient</h1>
+
+        <form id="registerForm">
+            <input type="text" id="first_name" placeholder="First Name" required><br>
+            <input type="text" id="last_name" placeholder="Last Name" required><br>
+            <input type="date" id="date_of_birth" required><br>
+
+            <select id="sex" required>
+                <option value="">Select Sex</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+            </select><br>
+
+            <input type="text" id="phone" placeholder="Phone" required><br>
+            <input type="email" id="email" placeholder="Email" required><br>
+            <input type="text" id="address" placeholder="Address" required><br>
+
+            <button type="submit">Register</button>
+        </form>
+
+        <p id="message"></p>
+    </div>
+
+    <script src="register.js"></script>
+</body>
+</html>

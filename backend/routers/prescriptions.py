@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from database import SessionLocal
 from models.prescription import Prescription
 from models.patient import Patient
@@ -6,6 +6,7 @@ from models.appointment import Appointment
 from schemas.prescription import PrescriptionCreate, PrescriptionResponse
 from routers.auth import require_clearance
 from fastapi import Depends
+from routers.auth import get_current_user, require_clearance
 
 router = APIRouter(prefix="/prescriptions", tags=["Prescriptions"])
 
@@ -48,8 +49,21 @@ def create_prescription(
 
     return new_prescription
 
+@router.get("/", response_model=list[PrescriptionResponse])
+def get_all_prescriptions(user = Depends(require_clearance(2))):
+    db = SessionLocal()
+
+    prescriptions = db.query(Prescription).all()
+
+    db.close()
+    return prescriptions
+
 @router.get("/patient/{patient_id}", response_model=list[PrescriptionResponse])
-def get_prescriptions_for_patient(patient_id: int):
+def get_prescriptions_for_patient(patient_id: int, user = Depends(get_current_user)):
+    
+    if user.clearance == 1 and user.patient_id != patient_id:
+        raise HTTPException(status_code=403, detail="Access denied")
+    
     db = SessionLocal()
 
     patient = db.query(Patient).filter(Patient.patient_id == patient_id).first()

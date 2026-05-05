@@ -21,7 +21,7 @@ router = APIRouter(prefix="/auth", tags=["Auth"])
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/token")
 
 
 def get_password_hash(password: str):
@@ -54,7 +54,8 @@ def register_user(user: UserCreate):
         email=user.email,
         hashed_password=get_password_hash(user.password),
         disabled=False,
-        clearance=user.clearance
+        clearance=user.clearance,
+        patient_id=user.patient_id
     )
 
     db.add(new_user)
@@ -99,9 +100,11 @@ def login(form_data: OAuth2PasswordRequestForm = Depends()):
     db.close()
 
     return {
-        "access_token": access_token,
-        "token_type": "bearer"
-    }
+    "access_token": access_token,
+    "token_type": "bearer",
+    "clearance": user.clearance,
+    "patient_id": user.patient_id
+}
 
 def get_current_user(token: str = Depends(oauth2_scheme)):
     credentials_exception = HTTPException(
